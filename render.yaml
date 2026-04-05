@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: finance-dashboard-backend
+    env: node
+    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    startCommand: node src/app.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: finance-dashboard-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: PORT
+        value: 5000
+
+databases:
+  - name: finance-dashboard-db
+    databaseName: finance_dashboard
+    user: finance_user
+    plan: free
